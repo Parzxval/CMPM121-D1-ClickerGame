@@ -39,7 +39,7 @@ chudbutton.type = "button";
 
 chudbutton.addEventListener("click", () => {
   chuds++;
-  console.log("Chuds: " + chuds);
+  console.log("Chuds Ammount: " + chuds);
 });
 
 app.append(title, image, heading, message, chudbutton);
