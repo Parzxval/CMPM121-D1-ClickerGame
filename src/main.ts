@@ -5,6 +5,49 @@
 // Downloaded from https://www.forbes.com/digital-assets/assets/chudjak-chud/
 import chudUrl from "./assets/chud.svg?no-inline";
 
+/*
+//Setting up all of the game data and constants
+interface UpgradeDef {
+  id: string;
+  name: string;
+  baseCost: number;
+  costGrowth: number;
+  clickBonus: number;
+  perSecond: number;
+}
+
+const UPGRADES: UpgradeDef[] = [
+  {
+    id: "clickPower",
+    name: "Stronger Chud Click",
+    baseCost: 10,
+    costGrowth: 1.67,
+    clickBonus: 1,
+    perSecond: 0,
+  },
+  {
+    id: "autoChudder",
+    name: "Auto-Chudder",
+    baseCost: 25,
+    costGrowth: 1.67,
+    clickBonus: 0,
+    perSecond: 1,
+  },
+];
+
+const CATCHPHRASES = [
+  "Get your hands off me NPC!",
+  "How about you go touch grass instead?",
+  "Step back, I am a highvalue male!",
+  "I knew you could see my inner alpha",
+  "The West had fallen, billions must die",
+  "Soy!",
+];
+
+const BASE_CLICK_POWER = 1;
+const GAMBLE_WIN_CHANCE = 0.5;
+*/
+
 const app = document.querySelector<HTMLElement>("#app")!;
 
 const title = document.createElement("h1");
@@ -57,8 +100,7 @@ const chudCatchphrases = [
 
 const chudPerClickUpgrader = document.createElement("button");
 chudPerClickUpgrader.textContent = "Increase to " + (chudPerClick + 1) +
-  " Chuds Per Click (Costs " +
-  CpcUpgradeCost + " Chuds)";
+  " Chuds Per Click (Costs " + CpcUpgradeCost + " Chuds)";
 chudPerClickUpgrader.type = "button";
 
 const autoChuddersUpgrader = document.createElement("button");
