@@ -95,6 +95,75 @@ function gamble(): boolean {
   state.chuds = won ? state.chuds * 2 : 0;
   return won;
 }
+
+//Make all of the DOM elements and listeners
+const app = document.querySelector<HTMLElement>("#app")!;
+
+function makeButton(text: string, onClick: () => void): HTMLButtonElement {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = text;
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+function makeParagraph(text = ""): HTMLParagraphElement {
+  const p = document.createElement("p");
+  p.textContent = text;
+  return p;
+}
+
+const title = document.createElement("h1");
+title.textContent = "Chud Clicker";
+
+const image = document.createElement("img");
+image.src = chudUrl;
+image.alt = "The Chud mascot";
+image.width = 500;
+image.height = 500;
+
+const hint = makeParagraph("It's time to chud out. Click me!");
+const speech = makeParagraph();
+const counter = makeParagraph();
+const clickStat = makeParagraph();
+const rateStat = makeParagraph();
+
+function chudOut(withSpeech: boolean): void {
+  state.chuds += chudsPerClick();
+  hint.hidden = true;
+  speech.textContent = withSpeech
+    ? CATCHPHRASES[Math.floor(Math.random() * CATCHPHRASES.length)]
+    : "";
+}
+
+image.addEventListener("click", () => chudOut(true));
+const chudButton = makeButton("Chud Out!", () => chudOut(false));
+
+const gambleButton = makeButton("Gamble for Chuds!", () => {
+  speech.textContent = gamble()
+    ? "Happy Chudmas! We've multiplied!"
+    : "Nothing ever happens...";
+});
+
+const upgradeButtons = new Map<string, HTMLButtonElement>();
+for (const def of UPGRADES) {
+  upgradeButtons.set(def.id, makeButton("", () => purchase(def)));
+}
+
+function render(): void {
+  const whole = Math.floor(state.chuds);
+  counter.textContent = `${whole} ${whole === 1 ? "Chud" : "Chuds"}`;
+  clickStat.textContent = `Chuds Per Click: ${chudsPerClick()}`;
+  rateStat.textContent = `Chuds Per Second: ${chudsPerSecond()}`;
+
+  for (const def of UPGRADES) {
+    const button = upgradeButtons.get(def.id)!;
+    button.textContent = `${def.name} (Costs ${costOf(def)} Chuds, Owned: ${
+      state.owned[def.id]
+    })`;
+    button.disabled = !canAfford(def);
+  }
+}
 */
 
 const app = document.querySelector<HTMLElement>("#app")!;
