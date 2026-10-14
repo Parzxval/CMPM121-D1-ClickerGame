@@ -46,6 +46,55 @@ const CATCHPHRASES = [
 
 const BASE_CLICK_POWER = 1;
 const GAMBLE_WIN_CHANCE = 0.5;
+
+//Set up the game state and its logic, without touching the DOM
+interface GameState {
+  chuds: number;
+  owned: Record<string, number>;
+}
+
+const state: GameState = {
+  chuds: 0,
+  owned: Object.fromEntries(UPGRADES.map((u) => [u.id, 0])),
+};
+
+function costOf(def: UpgradeDef): number {
+  return Math.ceil(
+    def.baseCost * Math.pow(def.costGrowth, state.owned[def.id]),
+  );
+}
+
+function canAfford(def: UpgradeDef): boolean {
+  return state.chuds >= costOf(def);
+}
+
+function chudsPerClick(): number {
+  return UPGRADES.reduce(
+    (sum, u) => sum + u.clickBonus * state.owned[u.id],
+    BASE_CLICK_POWER,
+  );
+}
+
+function chudsPerSecond(): number {
+  return UPGRADES.reduce((sum, u) => sum + u.perSecond * state.owned[u.id], 0);
+}
+
+function purchase(def: UpgradeDef): boolean {
+  if (!canAfford(def)) return false;
+  state.chuds -= costOf(def);
+  state.owned[def.id] += 1;
+  return true;
+}
+
+function tick(seconds: number): void {
+  state.chuds += chudsPerSecond() * seconds;
+}
+
+function gamble(): boolean {
+  const won = Math.random() < GAMBLE_WIN_CHANCE;
+  state.chuds = won ? state.chuds * 2 : 0;
+  return won;
+}
 */
 
 const app = document.querySelector<HTMLElement>("#app")!;
