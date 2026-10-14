@@ -13,11 +13,11 @@ title.textContent = "Chud Clicker";
 const image = document.createElement("img");
 image.src = chudUrl;
 image.alt = "A teal tile with a cream circle";
-image.width = 96;
-image.height = 96;
+image.width = 500;
+image.height = 500;
 
 const heading = document.createElement("P");
-heading.textContent = "It's time to chud out. Click that chud!";
+heading.textContent = "It's time to chud out. Click me!";
 
 let chuds = 0;
 let chudPerClick = 1;
@@ -27,13 +27,33 @@ let autoChudders = 0;
 
 const message = document.createElement("P");
 
+const speech = document.createElement("P");
+
 const chudbutton = document.createElement("button");
 chudbutton.textContent = "Chud Out!";
 chudbutton.type = "button";
 
 chudbutton.addEventListener("click", () => {
   chuds += chudPerClick;
+  speech.textContent = "";
+  heading.style.display = "none";
 });
+
+image.addEventListener("click", () => {
+  chuds += chudPerClick;
+  heading.style.display = "none";
+  speech.textContent =
+    chudCatchphrases[Math.floor(Math.random() * chudCatchphrases.length)];
+});
+
+const chudCatchphrases = [
+  "Get your hands off me NPC!",
+  "How about you go touch grass instead?",
+  "Step back, I am a highvalue male!",
+  "I knew you could see my inner alpha",
+  "The West had fallen, billions must die",
+  "Soy!",
+];
 
 const chudPerClickUpgrader = document.createElement("button");
 chudPerClickUpgrader.textContent = "Increase to " + (chudPerClick + 1) +
@@ -69,6 +89,20 @@ autoChuddersUpgrader.addEventListener("click", () => {
   autoChuddersUpgrader.textContent = "Purchase Auto-Chudder" + " (Costs " +
     autoChuddersCost + " Chuds)";
   autoChuddersMessage.textContent = "Auto-Chudders: " + autoChudders;
+});
+
+const gamblingButton = document.createElement("button");
+gamblingButton.textContent = "Gamble for Chuds!";
+gamblingButton.type = "button";
+
+gamblingButton.addEventListener("click", () => {
+  if (Math.random() < 0.5) {
+    chuds = 0;
+    speech.textContent = "Nothing ever happens...";
+  } else {
+    chuds *= 2;
+    speech.textContent = "Happy Chudmas! We've multipled!";
+  }
 });
 
 const chudPerClickMessage = document.createElement("P");
@@ -108,11 +142,13 @@ requestAnimationFrame(update);
 app.append(
   title,
   image,
+  speech,
   heading,
   message,
   chudbutton,
   chudPerClickUpgrader,
   autoChuddersUpgrader,
+  gamblingButton,
   chudPerClickMessage,
   autoChuddersMessage,
 );
