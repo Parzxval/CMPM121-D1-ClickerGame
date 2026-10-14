@@ -5,7 +5,6 @@
 // Downloaded from https://www.forbes.com/digital-assets/assets/chudjak-chud/
 import chudUrl from "./assets/chud.svg?no-inline";
 
-/*
 //Setting up all of the game data and constants
 interface UpgradeDef {
   id: string;
@@ -164,151 +163,26 @@ function render(): void {
     button.disabled = !canAfford(def);
   }
 }
-*/
 
-const app = document.querySelector<HTMLElement>("#app")!;
-
-const title = document.createElement("h1");
-title.textContent = "Chud Clicker";
-
-const image = document.createElement("img");
-image.src = chudUrl;
-image.alt = "A teal tile with a cream circle";
-image.width = 500;
-image.height = 500;
-
-const heading = document.createElement("P");
-heading.textContent = "It's time to chud out. Click me!";
-
-let chuds = 0;
-let chudPerClick = 1;
-let CpcUpgradeCost = 10;
-let autoChuddersCost = 25;
-let autoChudders = 0;
-
-const message = document.createElement("P");
-
-const speech = document.createElement("P");
-
-const chudbutton = document.createElement("button");
-chudbutton.textContent = "Chud Out!";
-chudbutton.type = "button";
-
-chudbutton.addEventListener("click", () => {
-  chuds += chudPerClick;
-  speech.textContent = "";
-  heading.style.display = "none";
-});
-
-image.addEventListener("click", () => {
-  chuds += chudPerClick;
-  heading.style.display = "none";
-  speech.textContent =
-    chudCatchphrases[Math.floor(Math.random() * chudCatchphrases.length)];
-});
-
-const chudCatchphrases = [
-  "Get your hands off me NPC!",
-  "How about you go touch grass instead?",
-  "Step back, I am a highvalue male!",
-  "I knew you could see my inner alpha",
-  "The West had fallen, billions must die",
-  "Soy!",
-];
-
-const chudPerClickUpgrader = document.createElement("button");
-chudPerClickUpgrader.textContent = "Increase to " + (chudPerClick + 1) +
-  " Chuds Per Click (Costs " + CpcUpgradeCost + " Chuds)";
-chudPerClickUpgrader.type = "button";
-
-const autoChuddersUpgrader = document.createElement("button");
-autoChuddersUpgrader.textContent = "Purchase Auto-Chudder" + " (Costs " +
-  autoChuddersCost + " Chuds)";
-autoChuddersUpgrader.type = "button";
-
-chudPerClickUpgrader.addEventListener("click", () => {
-  if (chuds < CpcUpgradeCost) {
-    return;
-  }
-  chuds -= CpcUpgradeCost;
-  chudPerClick += 1;
-  CpcUpgradeCost = Math.ceil(CpcUpgradeCost * 1.67);
-  message.textContent = chuds + " Chuds";
-  chudPerClickUpgrader.textContent = "Increase to " + (chudPerClick + 1) +
-    " Chuds Per Click (Costs " + CpcUpgradeCost + " Chuds)";
-  chudPerClickMessage.textContent = "Chuds Per Click: " + chudPerClick;
-});
-
-autoChuddersUpgrader.addEventListener("click", () => {
-  if (chuds < autoChuddersCost) {
-    return;
-  }
-  chuds -= autoChuddersCost;
-  autoChudders += 1;
-  autoChuddersCost = Math.ceil(autoChuddersCost * 1.67);
-  autoChuddersUpgrader.textContent = "Purchase Auto-Chudder" + " (Costs " +
-    autoChuddersCost + " Chuds)";
-  autoChuddersMessage.textContent = "Auto-Chudders: " + autoChudders;
-});
-
-const gamblingButton = document.createElement("button");
-gamblingButton.textContent = "Gamble for Chuds!";
-gamblingButton.type = "button";
-
-gamblingButton.addEventListener("click", () => {
-  if (Math.random() < 0.5) {
-    chuds = 0;
-    speech.textContent = "Nothing ever happens...";
-  } else {
-    chuds *= 2;
-    speech.textContent = "Happy Chudmas! We've multipled!";
-  }
-});
-
-const chudPerClickMessage = document.createElement("P");
-chudPerClickMessage.textContent = "Chuds Per Click: " + chudPerClick;
-
-const autoChuddersMessage = document.createElement("P");
-autoChuddersMessage.textContent = "Auto-Chudders: " + autoChudders;
-
+//Main loop
 let lastUpdate = performance.now();
-function update(now: number) {
-  const seconds = (now - lastUpdate) / 1000;
+function frame(now: number): void {
+  tick((now - lastUpdate) / 1000);
   lastUpdate = now;
-  chuds += autoChudders * seconds;
-  if (chuds < CpcUpgradeCost) {
-    chudPerClickUpgrader.disabled = true;
-  } else {
-    chudPerClickUpgrader.disabled = false;
-  }
-
-  if (chuds < autoChuddersCost) {
-    autoChuddersUpgrader.disabled = true;
-  } else {
-    autoChuddersUpgrader.disabled = false;
-  }
-
-  if (chuds == 1) {
-    message.textContent = Math.floor(chuds) + " Chud";
-  } else {
-    message.textContent = Math.floor(chuds) + " Chuds";
-  }
-
-  requestAnimationFrame(update);
+  render();
+  requestAnimationFrame(frame);
 }
-
-requestAnimationFrame(update);
+requestAnimationFrame(frame);
 
 app.append(
   title,
   image,
   speech,
-  heading,
-  message,
-  chudbutton,
-  chudPerClickUpgrader,
-  autoChuddersUpgrader,
-  gamblingButton,
-  chudPerClickMessage,
-  autoChuddersMessage,
+  hint,
+  counter,
+  chudButton,
+  ...upgradeButtons.values(),
+  gambleButton,
+  clickStat,
+  rateStat,
 );
