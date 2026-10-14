@@ -44,11 +44,11 @@ Production uses elapsed seconds from `performance.now()`, not frame counts, so i
 
 ### Design revision
 
-Smell:
+Smell: Each upgrade and its cost, effect, label and click handler was copy and pasted to wherever we were working. Also the click handlers were mixed the game rules that were being set up with the DOM updates.
 
-Principle:
+Principle: Followed SRP so that now the content data, game rules, and rendering are all separate.
 
-Easier:
+Easier: Adding an upgrade is just one data entry now instead of having to add a new handler, label code, and stat variable.
 
 ## Credits
 
