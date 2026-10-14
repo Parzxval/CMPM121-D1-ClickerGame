@@ -22,8 +22,8 @@ heading.textContent = "It's time to chud out. Click that chud!";
 let chuds = 0;
 let chudPerClick = 1;
 let CpcUpgradeCost = 10;
-let autoChuddersCost = 25;
-let autoChudders = 0;
+const autoChuddersCost = 25;
+const autoChudders = 0;
 
 const message = document.createElement("P");
 
