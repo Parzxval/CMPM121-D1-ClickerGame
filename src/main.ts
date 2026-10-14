@@ -22,8 +22,8 @@ heading.textContent = "It's time to chud out. Click that chud!";
 let chuds = 0;
 let chudPerClick = 1;
 let CpcUpgradeCost = 10;
-const autoChuddersCost = 25;
-const autoChudders = 0;
+let autoChuddersCost = 25;
+let autoChudders = 0;
 
 const message = document.createElement("P");
 
@@ -41,9 +41,10 @@ chudPerClickUpgrader.textContent = "Increase to " + (chudPerClick + 1) +
   CpcUpgradeCost + " Chuds)";
 chudPerClickUpgrader.type = "button";
 
-const autoChuddersUpgrade = document.createElement("button");
-autoChuddersUpgrade.textContent = "Purchase Auto-Chudder";
-autoChuddersUpgrade.type = "button";
+const autoChuddersUpgrader = document.createElement("button");
+autoChuddersUpgrader.textContent = "Purchase Auto-Chudder" + " (Costs " +
+  autoChuddersCost + " Chuds)";
+autoChuddersUpgrader.type = "button";
 
 chudPerClickUpgrader.addEventListener("click", () => {
   if (chuds < CpcUpgradeCost) {
@@ -55,7 +56,26 @@ chudPerClickUpgrader.addEventListener("click", () => {
   message.textContent = chuds + " Chuds";
   chudPerClickUpgrader.textContent = "Increase to " + (chudPerClick + 1) +
     " Chuds Per Click (Costs " + CpcUpgradeCost + " Chuds)";
+  chudPerClickMessage.textContent = "Chuds Per Click: " + chudPerClick;
 });
+
+autoChuddersUpgrader.addEventListener("click", () => {
+  if (chuds < autoChuddersCost) {
+    return;
+  }
+  chuds -= autoChuddersCost;
+  autoChudders += 1;
+  autoChuddersCost = Math.ceil(autoChuddersCost * 1.67);
+  autoChuddersUpgrader.textContent = "Purchase Auto-Chudder" + " (Costs " +
+    autoChuddersCost + " Chuds)";
+  autoChuddersMessage.textContent = "Auto-Chudders: " + autoChudders;
+});
+
+const chudPerClickMessage = document.createElement("P");
+chudPerClickMessage.textContent = "Chuds Per Click: " + chudPerClick;
+
+const autoChuddersMessage = document.createElement("P");
+autoChuddersMessage.textContent = "Auto-Chudders: " + autoChudders;
 
 let lastUpdate = performance.now();
 function update(now: number) {
@@ -69,15 +89,15 @@ function update(now: number) {
   }
 
   if (chuds < autoChuddersCost) {
-    autoChuddersUpgrade.disabled = true;
+    autoChuddersUpgrader.disabled = true;
   } else {
-    autoChuddersUpgrade.disabled = false;
+    autoChuddersUpgrader.disabled = false;
   }
 
   if (chuds == 1) {
-    message.textContent = chuds + " Chud";
+    message.textContent = Math.floor(chuds) + " Chud";
   } else {
-    message.textContent = chuds + " Chuds";
+    message.textContent = Math.floor(chuds) + " Chuds";
   }
 
   requestAnimationFrame(update);
@@ -92,5 +112,7 @@ app.append(
   message,
   chudbutton,
   chudPerClickUpgrader,
-  autoChuddersUpgrade,
+  autoChuddersUpgrader,
+  chudPerClickMessage,
+  autoChuddersMessage,
 );
